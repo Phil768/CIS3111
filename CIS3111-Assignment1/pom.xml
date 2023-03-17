@@ -14,4 +14,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>appengine-maven-plugin</artifactId>
+                <version>2.4.1</version>
+                <configuration>
+                    <projectId>"cis3111-2023-assignment-1"</projectId>
+                    <version>"1.0"</version>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
