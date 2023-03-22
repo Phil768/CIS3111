@@ -1,3 +1,4 @@
+service: api
 runtime: nodejs
 env: flex
 
@@ -8,6 +9,10 @@ automatic_scaling:
   cpu_utilization:
     target_utilization: 0.6
   target_concurrent_requests: 100
+
+handlers:
+  - url: /.*
+    script: auto
 
 runtime_config:
   runtime_version: "16"
