@@ -9,7 +9,7 @@ automatic_scaling:
     target_utilization: 0.6
   target_concurrent_requests: 100
 
-  runtime_config:
-    runtime_version: "16"
+runtime_config:
+  runtime_version: "16"
 
 entrypoint: node index.js
