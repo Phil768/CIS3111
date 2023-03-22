@@ -1,0 +1,8 @@
+runtime: nodejs16
+env: flex
+
+automatic_scaling:
+  min_instances: 5
+  max_instances: 15
+
+entrypoint: node index.js
