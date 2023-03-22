@@ -1,4 +1,4 @@
-runtime: nodejs16
+runtime: nodejs
 env: flex
 
 automatic_scaling:
@@ -8,5 +8,8 @@ automatic_scaling:
   cpu_utilization:
     target_utilization: 0.6
   target_concurrent_requests: 100
+
+  runtime_config:
+    runtime_version: "16"
 
 entrypoint: node index.js
