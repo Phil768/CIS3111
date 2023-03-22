@@ -1,7 +1,8 @@
 runtime: nodejs16
 env: flex
 
-inbound_services: warmup
+inbound_services:
+  - warmup
 
 automatic_scaling:
   min_instances: 5
