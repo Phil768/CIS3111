@@ -5,7 +5,11 @@ inbound_services:
   - warmup
 
 automatic_scaling:
-  min_instances: 5
-  max_instances: 15
+  min_num_instances: 1
+  max_num_instances: 10
+  cool_down_period_sec: 180
+  cpu_utilization:
+    target_utilization: 0.6
+  target_concurrent_requests: 100
 
 entrypoint: node index.js
