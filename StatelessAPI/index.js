@@ -20,16 +20,22 @@ const createTcpPool = async (config) => {
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.post("/storeNumbers", async (req, res) => {
   try {
+    //Establishing the connection.
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
-    for (let i = 0; i < 1000; i++) {
+    //Creating the table;
+    const dropTableQuery = `DROP TABLE IF EXISTS random_numbers;`;
+    await connection.query(dropTableQuery);
+    const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
+    await connection.query(createTableQuery);
+    for (let i = 0; i < 5; i++) {
       try {
         //For each iteration we generate a number between 0 and 100,000.
         const randomNumber = Math.floor(Math.random() * 100001);
-        //Getting the instance name.
-        const instanceName = process.env.GAE_INSTANCE;
+        //Getting the instance name.(default in case it is used locally)
+        const instanceName = process.env.GAE_INSTANCE || "default";
         //Creating the query which is used to store both the numbers and the instance name into the databse.
-        const query = `INSET INTO random_numbers (number, instance) VALUES (${randomNumber}, ${instanceName})`;
+        const query = `INSERT INTO random_numbers (instance_name, random_number) VALUES (${instanceName}, ${randomNumber});`;
         //Executing the query.
         await connection.query(query);
         console.log("Connected and generated number");
@@ -41,8 +47,56 @@ app.post("/storeNumbers", async (req, res) => {
     await connection.release();
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
-      message: "Execution worked successfully",
+      message: "Success",
     });
+  } catch (e) {
+    //Getting a failed message from serer if something goes wrong.
+    console.error(e);
+    res.status(500).json({
+      message: "Error generating and storing random numbers",
+      error: e.message,
+    });
+  }
+});
+//Creating the second endpoint required to fetch the random numbers from the databse.
+app.get("/getNumbers", async (req, res) => {
+  try {
+    //Establishing the connection.
+    const TCP = await createTcpPool();
+    const connection = await TCP.getConnection();
+    //Getting the largest number and its isntance.
+    const largest =
+      "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
+    //Saving the returned object into a variable.
+    const largestResult = await connection.query(largest);
+    //Saving the largest number and its instance name into separate variables.
+    const largestNumber = largestResult[0].largest_number;
+    const largestInstanceName = largestResult[0].instance_name;
+    //Getting the smallest number and its isntance.
+    const smallest =
+      "SELECT MIN(random_number) AS smallest_number, instance_name FROM random_numbers GROUP BY instance_name;";
+    //Saving the returned object into a variable.
+    const smallestResult = await connection.query(smallest);
+    //Saving the smallest number and its instance name into separate variables.
+    const smallestNumber = smallestResult[0].smallest_number;
+    const smallestInstanceName = smallestResult[0].instance_name;
+    //Closing the connection.
+    await connection.release();
+    res.status(200).json({
+      message: "Success",
+    });
+    console.log(
+      "The largest number is " +
+        largestNumber +
+        " and is in instance " +
+        largestInstanceName
+    );
+    console.log(
+      "The smallest number is " +
+        smallestNumber +
+        " and is in instance " +
+        smallestInstanceName
+    );
   } catch (e) {
     //Getting a failed message from serer if something goes wrong.
     console.error(e);
