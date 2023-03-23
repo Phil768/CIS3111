@@ -48,7 +48,11 @@ app.post("/storeNumbers", async (req, res) => {
     console.error(e);
     res.status(500).json({
       message: "Error generating and storing random numbers",
-      error: error.message,
+      error: e.message,
     });
   }
+});
+//Creating a method which is listening to any icnomeing requests.
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
 });
