@@ -3,7 +3,7 @@ const express = require("express");
 const mysql = require("promise-mysql");
 const app = express();
 //Storing the port into a constant variable.
-const port = 3000;
+const port = 5000;
 //Establishing the connection with the database.
 const createTcpPool = async (config) => {
   //Creating an object with all the required properties.
