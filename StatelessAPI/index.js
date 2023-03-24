@@ -20,7 +20,11 @@ const createTcpPool = async (config) => {
 
 // Set up CORS headers to allow requests from different servers.
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // Allow requests from this domain
+  res.header(
+    "Access-Control-Allow-Origin",
+    "http://localhost:3000" ||
+      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com"
+  ); // Allow requests from this domain
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"

@@ -12,6 +12,10 @@ automatic_scaling:
 
 handlers:
   - url: /.*
+    http_headers:
+      Access-Control-Allow-Origin: "*"
+      Access-Control-Allow-Methods: "GET, POST, PUT, DELETE, OPTIONS"
+      Access-Control-Allow-Headers: "*"
     script: auto
 
 runtime_config:
