@@ -17,6 +17,16 @@ const createTcpPool = async (config) => {
   //Returning the connection.
   return mysql.createPool(dbConfig);
 };
+
+// Set up CORS headers to allow requests from different servers.
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // Allow requests from this domain
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.post("/storeNumbers", async (req, res) => {
   try {
@@ -64,6 +74,11 @@ app.get("/getNumbers", async (req, res) => {
     //Establishing the connection.
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
+    //Selecting all the distinct instance names from the table.
+    const allInstances =
+      "SELECT instance_name, COUNT(*) as count FROM random_numbers GROUP BY instance_name;";
+    //Executing the query.
+    const allInstancesResult = await connection.query(allInstances);
     //Getting the largest number and its isntance.
     const largest =
       "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
@@ -82,9 +97,7 @@ app.get("/getNumbers", async (req, res) => {
     const smallestInstanceName = smallestResult[0].instance_name;
     //Closing the connection.
     await connection.release();
-    res.status(200).json({
-      message: "Success",
-    });
+
     console.log(
       "The largest number is " +
         largestNumber +
@@ -97,6 +110,14 @@ app.get("/getNumbers", async (req, res) => {
         " and is in instance " +
         smallestInstanceName
     );
+    //Storing the obtained data into a variable.
+    const returnedData = {
+      instances: allInstancesResult,
+      largest: { number: largestNumber, instance: largestInstanceName },
+      smallest: { number: smallestNumber, instance: smallestInstanceName },
+    };
+    //Returning the obtained data.
+    res.send(returnedData);
   } catch (e) {
     //Getting a failed message from serer if something goes wrong.
     console.error(e);
