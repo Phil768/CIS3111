@@ -1,4 +1,4 @@
-runtime: nodejs16
+runtime: nodejs
 env: flex
 
 handlers:
@@ -10,6 +10,9 @@ handlers:
     upload: build/index.html
   - url: /.*
     script: auto
+
+runtime_config:
+  runtime_version: "16"
 
 env_variables:
   NODE_ENV: production
