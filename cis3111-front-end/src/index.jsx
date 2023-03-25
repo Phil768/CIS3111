@@ -10,22 +10,26 @@ function Container() {
   const [showTable, setShowTable] = React.useState(false);
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = () => {
-    fetch(
-      //"http://localhost:5000/storeNumbers" ||
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
+    try {
+      fetch(
+        //"http://localhost:5000/storeNumbers" ||
+        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      )
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    } catch (e) {
+      console.log("Error: " + e);
+    }
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
