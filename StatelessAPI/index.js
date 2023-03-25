@@ -19,16 +19,20 @@ const createTcpPool = async (config) => {
 };
 
 // Set up CORS headers to allow requests from different servers.
-app.use(function (req, res, next) {
-  res.header(
+app.use((req, res, next) => {
+  res.setHeader(
     "Access-Control-Allow-Origin",
-    "http://localhost:3000" ||
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com"
-  ); // Allow requests from this domain
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "https://cis3111-2023-assignment-1.ew.r.appspot.com"
   );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
