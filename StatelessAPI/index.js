@@ -1,6 +1,7 @@
 //Importing the required libraries;
 const express = require("express");
 const mysql = require("promise-mysql");
+const cors = require("cors");
 const app = express();
 //Storing the port into a constant variable.
 const port = process.env.PORT || 5000;
@@ -19,22 +20,27 @@ const createTcpPool = async (config) => {
 };
 
 // Set up CORS headers to allow requests from different servers.
-app.use((req, res, next) => {
-  res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://cis3111-2023-assignment-1.ew.r.appspot.com"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", true);
-  next();
-});
+app.use(
+  cors({
+    origin: "https://cis3111-2023-assignment-1.ew.r.appspot.com",
+  })
+);
+// app.use((req, res, next) => {
+//   res.setHeader(
+//     "Access-Control-Allow-Origin",
+//     "https://cis3111-2023-assignment-1.ew.r.appspot.com/"
+//   );
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+//   );
+//   res.setHeader(
+//     "Access-Control-Allow-Headers",
+//     "X-Requested-With,content-type"
+//   );
+//   res.setHeader("Access-Control-Allow-Credentials", true);
+//   next();
+// });
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.post("/storeNumbers", async (req, res) => {
   try {
