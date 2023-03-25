@@ -18,7 +18,7 @@ const createTcpPool = async (config) => {
   //Returning the connection.
   return mysql.createPool(dbConfig);
 };
-
+console.log(port);
 // Set up CORS headers to allow requests from different servers.
 app.use(
   cors({
@@ -41,6 +41,10 @@ app.use(
 //   res.setHeader("Access-Control-Allow-Credentials", true);
 //   next();
 // });
+//Handling the root URL.
+app.get("/", function (req, res) {
+  res.send("Welcome to my API!");
+});
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.post("/storeNumbers", async (req, res) => {
   try {
