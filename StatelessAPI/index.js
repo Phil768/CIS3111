@@ -25,10 +25,12 @@ app.use(
     origin: "https://cis3111-2023-assignment-1.ew.r.appspot.com",
   })
 );
-res.setHeader(
-  "Access-Control-Allow-Origin",
-  "https://cis3111-2023-assignment-1.ew.r.appspot.com"
-);
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    message: err.message,
+    stack: err.stack,
+  });
+});
 // app.use((req, res, next) => {
 //   res.setHeader(
 //     "Access-Control-Allow-Origin",
