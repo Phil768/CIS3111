@@ -24,7 +24,7 @@ function Container() {
         console.log(response);
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error.message);
       });
   };
   //Creating a function whoch will get the minimum and maximum.
