@@ -100,21 +100,26 @@ app.post("/storeNumbers", async (req, res) => {
 //Creating the second endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
   try {
+    console.log("HIT1")
     //Establishing the connection.
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
+    console.log("HIT2")
     //Selecting all the distinct instance names from the table.
     const allInstances =
       "SELECT instance_name, COUNT(*) as count FROM random_numbers GROUP BY instance_name;";
+      console.log("HIT3")
     //Executing the query.
     const allInstancesResult = await connection.query(allInstances);
     //Getting the largest number and its isntance.
     const largest =
       "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
-    //Saving the returned object into a variable.
+      console.log("HIT4")
+      //Saving the returned object into a variable.
     const largestResult = await connection.query(largest);
     //Saving the largest number and its instance name into separate variables.
     const largestNumber = largestResult[0].largest_number;
+    console.log(largestNumber);
     const largestInstanceName = largestResult[0].instance_name;
     //Getting the smallest number and its isntance.
     const smallest =

@@ -49,6 +49,7 @@ function Container() {
   React.useEffect(() => {
     console.log("DATA: " + JSON.stringify(data))
     if (data.hasOwnProperty("instance_name")) {
+      console.log("HIT");
       data.instances?.map((item) => console.log(item.instance_name, item.count));
       //Creating the table which will display all the instances along with their number of generated numbers.
       const instancesTable = document.getElementById("instancesTable");
