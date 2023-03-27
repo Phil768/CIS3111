@@ -47,12 +47,13 @@ function Container() {
   };
   //Creatubg a useEffect for the state to update immediately upon change. This is required since setState is not asynchronous.
   React.useEffect(() => {
-    if (Object.keys(data).length !== 0) {
-      data.instances.map((item) => console.log(item.instance_name, item.count));
+    console.log("DATA: " + JSON.stringify(data))
+    if (data.hasOwnProperty("instance_name")) {
+      data.instances?.map((item) => console.log(item.instance_name, item.count));
       //Creating the table which will display all the instances along with their number of generated numbers.
       const instancesTable = document.getElementById("instancesTable");
       const rows = data.instances
-        .map(
+        ?.map(
           (item) =>
             `<tr><td>${item.instance_name}</td><td>${item.count}</td></tr>`
         )
