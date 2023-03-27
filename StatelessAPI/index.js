@@ -20,16 +20,24 @@ const createTcpPool = async (config) => {
 };
 console.log(port);
 // Set up CORS headers to allow requests from different servers.
-app.use(
-  cors({
-    origin: "https://cis3111-2023-assignment-1.ew.r.appspot.com",
-  })
-);
+// app.use(
+//   cors({
+//     origin: "https://cis3111-2023-assignment-1.ew.r.appspot.com",
+//   })
+// );
 app.use((err, req, res, next) => {
   res.status(500).json({
     message: err.message,
     stack: err.stack,
   });
+});
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
 });
 // app.use((req, res, next) => {
 //   res.setHeader(
