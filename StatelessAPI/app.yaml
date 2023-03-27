@@ -13,8 +13,6 @@ automatic_scaling:
 handlers:
   - url: /.*
     script: auto
-    http_headers:
-      Access-Control-Allow-Origin: https://cis3111-2023-assignment-1.ew.r.appspot.com
 
 runtime_config:
   runtime_version: "16"
