@@ -67,30 +67,39 @@ app.post("/storeNumbers", async (req, res) => {
     await connection.query(dropTableQuery);
     const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
     await connection.query(createTableQuery);
-    try{
-        for (let i = 0; i < 5; i++) {
-            console.log("HIT");
+    const promises = [];
+    for (let i = 0; i < 10; i++) {
+      const promise = new Promise(async (resolve, reject) => {
         try {
-            //For each iteration we generate a number between 0 and 100,000.
-            const randomNumber = Math.floor(Math.random() * 100001);
-            console.log(randomNumber);
-            //Getting the instance name.(default in case it is used locally)
-            const instanceName = process.env.GAE_INSTANCE || "default";
-            console.log(instanceName);
-            //Creating the query which is used to store both the numbers and the instance name into the databse.
-            const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
-            //Executing the query.
-            await connection.query(insertQuery);
-            console.log("Connected and generated number");
+          for (let j = 0; j < 5; j++) {
+            try {
+              //For each iteration we generate a number between 0 and 100,000.
+              const randomNumber = Math.floor(Math.random() * 100001);
+              console.log(randomNumber);
+              //Getting the instance name.(default in case it is used locally)
+              const instanceName = process.env.GAE_INSTANCE || "default";
+              console.log(instanceName);
+              //Creating the query which is used to store both the numbers and the instance name into the databse.
+              const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
+              //Executing the query.
+              await connection.query(insertQuery);
+              console.log("Connected and generated number");
+              resolve();
             } catch (e) {
-                console.log("Failed because: " + e);
+              console.log("Failed because: " + e);
             }
+          }
+        } catch (e) {
+          console.log(e);
+          reject(e);
         }
-    }catch(e){
-        console.log(e);
+      });
+      promises.push(promise);
     }
     //Closing the connection.
     await connection.release();
+    //Wait for all promises to be fullfilled.
+    await Promise.all(promises);
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
