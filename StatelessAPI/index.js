@@ -71,24 +71,23 @@ app.post("/storeNumbers", async (req, res) => {
     for (let i = 0; i < 10; i++) {
       const promise = new Promise(async (resolve, reject) => {
         try {
-          for (let j = 0; j < 5; j++) {
+          //Getting the instance name.(default in case it is used locally)
+          const instanceName = process.env.GAE_INSTANCE || "default";
+          for (let j = 0; j < 1000; j++) {
             try {
               //For each iteration we generate a number between 0 and 100,000.
               const randomNumber = Math.floor(Math.random() * 100001);
-              console.log(randomNumber);
-              //Getting the instance name.(default in case it is used locally)
-              const instanceName = process.env.GAE_INSTANCE || "default";
-              console.log(instanceName);
               //Creating the query which is used to store both the numbers and the instance name into the databse.
               const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
               //Executing the query.
               await connection.query(insertQuery);
               console.log("Connected and generated number");
-              resolve();
             } catch (e) {
               console.log("Failed because: " + e);
             }
           }
+          console.log(instanceName);
+          resolve();
         } catch (e) {
           console.log(e);
           reject(e);
