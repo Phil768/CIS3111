@@ -12,8 +12,8 @@ function Container() {
   const generateNumbers = () => {
     try {
       fetch(
-        //"http://localhost:5000/storeNumbers" ||
-        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
+        "http://localhost:5000/storeNumbers" ||
+          "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
         {
           method: "POST",
           headers: {
@@ -34,8 +34,8 @@ function Container() {
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
     fetch(
-      //"http://localhost:5000/getNumbers" ||
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers"
+      "http://localhost:5000/getNumbers" ||
+        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers"
     )
       .then(async (response) => {
         setData(await response.json());
@@ -47,10 +47,12 @@ function Container() {
   };
   //Creatubg a useEffect for the state to update immediately upon change. This is required since setState is not asynchronous.
   React.useEffect(() => {
-    console.log("DATA: " + JSON.stringify(data))
-    if (data.hasOwnProperty("instance_name")) {
+    console.log("DATA: " + JSON.stringify(data));
+    if (data.hasOwnProperty("instances")) {
       console.log("HIT");
-      data.instances?.map((item) => console.log(item.instance_name, item.count));
+      data.instances?.map((item) =>
+        console.log(item.instance_name, item.count)
+      );
       //Creating the table which will display all the instances along with their number of generated numbers.
       const instancesTable = document.getElementById("instancesTable");
       const rows = data.instances
