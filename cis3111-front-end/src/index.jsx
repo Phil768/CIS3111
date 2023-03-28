@@ -12,7 +12,7 @@ function Container() {
   const generateNumbers = () => {
     try {
       fetch(
-        "http://localhost:5000/storeNumbers" ||
+        //"http://localhost:5000/storeNumbers" ||
           "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
         {
           method: "POST",
@@ -34,7 +34,7 @@ function Container() {
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
     fetch(
-      "http://localhost:5000/getNumbers" ||
+      //"http://localhost:5000/getNumbers" ||
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers"
     )
       .then(async (response) => {

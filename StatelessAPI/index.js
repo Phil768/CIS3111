@@ -67,20 +67,27 @@ app.post("/storeNumbers", async (req, res) => {
     await connection.query(dropTableQuery);
     const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
     await connection.query(createTableQuery);
-    for (let i = 0; i < 5; i++) {
-      try {
-        //For each iteration we generate a number between 0 and 100,000.
-        const randomNumber = Math.floor(Math.random() * 100001);
-        //Getting the instance name.(default in case it is used locally)
-        const instanceName = process.env.GAE_INSTANCE || "default";
-        //Creating the query which is used to store both the numbers and the instance name into the databse.
-        const query = `INSERT INTO random_numbers (instance_name, random_number) VALUES (${instanceName}, ${randomNumber});`;
-        //Executing the query.
-        await connection.query(query);
-        console.log("Connected and generated number");
-      } catch (e) {
-        console.log("Failed because: " + e);
-      }
+    try{
+        for (let i = 0; i < 5; i++) {
+            console.log("HIT");
+        try {
+            //For each iteration we generate a number between 0 and 100,000.
+            const randomNumber = Math.floor(Math.random() * 100001);
+            console.log(randomNumber);
+            //Getting the instance name.(default in case it is used locally)
+            const instanceName = process.env.GAE_INSTANCE || "default";
+            console.log(instanceName);
+            //Creating the query which is used to store both the numbers and the instance name into the databse.
+            const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
+            //Executing the query.
+            await connection.query(insertQuery);
+            console.log("Connected and generated number");
+            } catch (e) {
+                console.log("Failed because: " + e);
+            }
+        }
+    }catch(e){
+        console.log(e);
     }
     //Closing the connection.
     await connection.release();
@@ -111,12 +118,14 @@ app.get("/getNumbers", async (req, res) => {
     console.log("HIT3");
     //Executing the query.
     const allInstancesResult = await connection.query(allInstances);
+    console.log(allInstancesResult);
     //Getting the largest number and its isntance.
     const largest =
       "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
     console.log("HIT4");
     //Saving the returned object into a variable.
     const largestResult = await connection.query(largest);
+    console.log(largestResult);
     //Saving the largest number and its instance name into separate variables.
     const largestNumber = largestResult[0].largest_number;
     console.log(largestNumber);
