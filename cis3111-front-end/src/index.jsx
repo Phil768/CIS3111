@@ -8,12 +8,13 @@ import reportWebVitals from "./reportWebVitals";
 function Container() {
   const [data, setData] = React.useState({});
   const [showTable, setShowTable] = React.useState(false);
-  //Creating a function whoch will generate and store all the random numbers.
-  const generateNumbers = () => {
+  const [reset, setReset] = React.useState(true);
+  //Creating a function which resets the table.
+  const resetTable = () => {
     try {
       fetch(
-        //"http://localhost:5000/storeNumbers" ||
-          "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
+        //"http://localhost:5000/resetTable" ||
+        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable",
         {
           method: "POST",
           headers: {
@@ -27,6 +28,32 @@ function Container() {
         .catch((error) => {
           console.log(error.message);
         });
+      setReset(!reset);
+    } catch (e) {
+      console.log("Error: " + e);
+    }
+  };
+  //Creating a function whoch will generate and store all the random numbers.
+  const generateNumbers = () => {
+    try {
+      for (let i = 0; i < 10000; i++) {
+        fetch(
+          //"http://localhost:5000/storeNumbers" ||
+          "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        )
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      }
     } catch (e) {
       console.log("Error: " + e);
     }
@@ -35,7 +62,7 @@ function Container() {
   const getNumbers = () => {
     fetch(
       //"http://localhost:5000/getNumbers" ||
-        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers"
+      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers"
     )
       .then(async (response) => {
         setData(await response.json());
@@ -112,6 +139,11 @@ function Container() {
           second table on the other hand displays some basic statistics found in
           the instances, such as the largest and smallest numbers.
         </p>
+        {reset && (
+          <button className="generateButton" onClick={resetTable}>
+            Reset
+          </button>
+        )}
         <button className="generateButton" onClick={generateNumbers}>
           Generate
         </button>

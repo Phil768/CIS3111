@@ -62,43 +62,21 @@ app.post("/storeNumbers", async (req, res) => {
     //Establishing the connection.
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
-    //Creating the table;
-    const dropTableQuery = `DROP TABLE IF EXISTS random_numbers;`;
-    await connection.query(dropTableQuery);
-    const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
-    await connection.query(createTableQuery);
-    const promises = [];
-    for (let i = 0; i < 10; i++) {
-      const promise = new Promise(async (resolve, reject) => {
-        try {
-          //Getting the instance name.(default in case it is used locally)
-          const instanceName = process.env.GAE_INSTANCE || "default";
-          for (let j = 0; j < 1000; j++) {
-            try {
-              //For each iteration we generate a number between 0 and 100,000.
-              const randomNumber = Math.floor(Math.random() * 100001);
-              //Creating the query which is used to store both the numbers and the instance name into the databse.
-              const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
-              //Executing the query.
-              await connection.query(insertQuery);
-              console.log("Connected and generated number");
-            } catch (e) {
-              console.log("Failed because: " + e);
-            }
-          }
-          console.log(instanceName);
-          resolve();
-        } catch (e) {
-          console.log(e);
-          reject(e);
-        }
-      });
-      promises.push(promise);
+    try {
+      //Getting the instance name.(default in case it is used locally)
+      const instanceName = process.env.GAE_INSTANCE || "default";
+      //Generatinga number between 0 and 100,000.
+      const randomNumber = Math.floor(Math.random() * 100001);
+      //Creating the query which is used to store both the numbers and the instance name into the databse.
+      const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
+      //Executing the query.
+      await connection.query(insertQuery);
+      console.log("Connected and generated number");
+    } catch (e) {
+      console.log("Failed because: " + e);
     }
     //Closing the connection.
     await connection.release();
-    //Wait for all promises to be fullfilled.
-    await Promise.all(promises);
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
@@ -175,6 +153,32 @@ app.get("/getNumbers", async (req, res) => {
     console.log(e);
     res.status(500).json({
       message: "Error getting random numbers",
+      error: e.message,
+    });
+  }
+});
+//Creatign the final table which is used to reset the table content.
+app.post("/resetTable", async (req, res) => {
+  try {
+    //Establishing the connection.
+    const TCP = await createTcpPool();
+    const connection = await TCP.getConnection();
+    //Creating the table;
+    const dropTableQuery = `DROP TABLE IF EXISTS random_numbers;`;
+    await connection.query(dropTableQuery);
+    const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
+    await connection.query(createTableQuery);
+    //Closing the connection.
+    await connection.release();
+    //Getting a successful message from serer if erverything works.
+    res.status(200).json({
+      message: "Success",
+    });
+  } catch (e) {
+    //Getting a failed message from serer if something goes wrong.
+    console.error(e);
+    res.status(500).json({
+      message: "Error creating the table",
       error: e.message,
     });
   }
