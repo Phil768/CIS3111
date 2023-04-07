@@ -38,19 +38,12 @@ function Container() {
     const promises = [];
     try {
       for (let i = 0; i < 10; i++) {
-        promises
-          .push(
-            fetch(
-              //"http://localhost:5000/storeNumbers" ||
-              "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers",
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              }
-            )
+        promises.push(
+          fetch(
+            //"http://localhost:5000/storeNumbers" ||
+            "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers"
           )
+        );
       }
       try {
         const responses = await Promise.all(promises);

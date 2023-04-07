@@ -27,37 +27,12 @@ app.use((err, req, res, next) => {
     stack: err.stack,
   });
 });
-// app.use(function (req, res, next) {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   res.setHeader("Access-Control-Allow-Methods", "POST, GET");
-//   next();
-// });
-// app.use((req, res, next) => {
-//   res.setHeader(
-//     "Access-Control-Allow-Origin",
-//     "https://cis3111-2023-assignment-1.ew.r.appspot.com/"
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Methods",
-//     "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-//   );
-//   res.setHeader(
-//     "Access-Control-Allow-Headers",
-//     "X-Requested-With,content-type"
-//   );
-//   res.setHeader("Access-Control-Allow-Credentials", true);
-//   next();
-// });
 //Handling the root URL.
 app.get("/", function (req, res) {
   res.send("Welcome to my API!");
 });
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
-app.post("/storeNumbers", async (req, res) => {
+app.get("/storeNumbers", async (req, res) => {
   try {
     //Establishing the connection.
     const TCP = await createTcpPool();
