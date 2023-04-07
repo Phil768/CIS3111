@@ -38,7 +38,7 @@ app.get("/storeNumbers", async (req, res) => {
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
     try {
-      for (let i = 0; i < 1000; i++) {
+     // for (let i = 0; i < 1000; i++) {
         //Getting the instance name.(default in case it is used locally)
         const instanceName = process.env.GAE_INSTANCE || "default";
         //Generatinga number between 0 and 100,000.
@@ -48,7 +48,7 @@ app.get("/storeNumbers", async (req, res) => {
         //Executing the query.
         await connection.query(insertQuery);
         console.log("Connected and generated number");
-      }
+     // }
     } catch (e) {
       console.log("Failed because: " + e);
     }
