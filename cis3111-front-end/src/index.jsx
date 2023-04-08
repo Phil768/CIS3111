@@ -11,10 +11,12 @@ function Container() {
   const [reset, setReset] = React.useState(true);
   //Creating a function which resets the table.
   const resetTable = () => {
+    const url =
+      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable";
     try {
       fetch(
-        //"http://localhost:5000/resetTable" ||
-        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable",
+        //"http://localhost:5000/resetTable",
+        url,
         {
           method: "POST",
           headers: {
@@ -36,32 +38,35 @@ function Container() {
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
     //Storing the URL in a constant.
-    const url = "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
-    //const promises = [];
+    const url = //"http://localhost:5000/storeNumbers";
+      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
+    const promises = [];
     try {
-      for (let i = 0; i < 10000; i++) {
-        //promises.push(
+      for (let i = 0; i < 10; i++) {
+        promises.push(
           fetch(
             //"http://localhost:5000/storeNumbers" ||
             url
           )
-        //);
+        );
       }
-    //   try {
-    //     const responses = await Promise.all(promises);
-    //     console.log(responses);
-    //   } catch (e) {
-    //     console.log(e);
-    //   }
+      try {
+        const responses = await Promise.all(promises);
+        console.log(responses);
+      } catch (e) {
+        console.log(e);
+      }
     } catch (e) {
       console.log("Error: " + e);
     }
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
+    const url =
+      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers";
     fetch(
       //"http://localhost:5000/getNumbers" ||
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers"
+      url
     )
       .then(async (response) => {
         setData(await response.json());
