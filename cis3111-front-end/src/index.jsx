@@ -44,10 +44,12 @@ function Container() {
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < 1000; j++) {
-          promises.push(fetch(url));
+      for (let i = 0; i < 100; i++) {
+        const batch = [];
+        for (let j = 0; j < 100; j++) {
+          batch.push(fetch(url));
         }
+        promises.push(Promise.all(batch));
         //Brief timeout to introduce a buffer to the SQL connections
         await new Promise((resolve) => setTimeout(resolve, 5000));
       }
