@@ -88,19 +88,25 @@ app.get("/getNumbers", async (req, res) => {
     console.log("HIT4");
     //Saving the returned object into a variable.
     const largestResult = await connection.query(largest);
-    console.log(largestResult);
-    //Saving the largest number and its instance name into separate variables.
-    const largestNumber = largestResult[0].largest_number;
-    console.log(largestNumber);
-    const largestInstanceName = largestResult[0].instance_name;
+    //Getting the largest number and its instance from the returned data.
+    const largestInformation = largestResult.reduce((prev, current) => {
+      return prev.largest_number > current.largest_number ? prev : current;
+    });
+    //Storing the largest number and its instance into constants.
+    const largestNumber = largestInformation.largest_number;
+    const largestInstanceName = largestInformation.instance_name;
     //Getting the smallest number and its isntance.
     const smallest =
       "SELECT MIN(random_number) AS smallest_number, instance_name FROM random_numbers GROUP BY instance_name;";
     //Saving the returned object into a variable.
     const smallestResult = await connection.query(smallest);
-    //Saving the smallest number and its instance name into separate variables.
-    const smallestNumber = smallestResult[0].smallest_number;
-    const smallestInstanceName = smallestResult[0].instance_name;
+    //Getting the smallest number and its instance from the returned data.
+    const smallestInformation = smallestResult.reduce((prev, current) => {
+      return prev.smallest_number < current.smallest_number ? prev : current;
+    });
+    //Saving the smallest number and its instance into constants.
+    const smallestNumber = smallestInformation.smallest_number;
+    const smallestInstanceName = smallestInformation.instance_name;
     //Closing the connection.
     await connection.release();
 
