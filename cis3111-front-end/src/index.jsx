@@ -38,26 +38,28 @@ function Container() {
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
     try {
-    const batchSize = 300;
-    const totalRequests = 10000;
-    const batches = Math.ceil(totalRequests / batchSize);
+      const batchSize = 500;
+      const totalRequests = 10000;
+      const batches = Math.ceil(totalRequests / batchSize);
 
-    //Storing the URL in a constant.
-    const url = //"http://localhost:5000/storeNumbers";
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
-    
-        for (let i = 0; i < batches; i++) {
-            const start = i * batchSize;
-            const end = Math.min(start + batchSize, totalRequests);
-        
-            const batchPromises = [];
-        
-            for (let j = start; j < end; j++) {
-              batchPromises.push(fetch(url));
-            }
-        
-            await Promise.all(batchPromises);
+      //Storing the URL in a constant.
+      const url = //"http://localhost:5000/storeNumbers";
+        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
+
+      for (let i = 0; i < batches; i++) {
+        const start = i * batchSize;
+        const end = Math.min(start + batchSize, totalRequests);
+
+        const batchPromises = [];
+
+        for (let j = start; j < end; j++) {
+          batchPromises.push(fetch(url));
         }
+
+        await Promise.all(batchPromises);
+        //Brief timeout to introduce a buffer to the SQL connections
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
     } catch (e) {
       console.log("Error: " + e);
     }
