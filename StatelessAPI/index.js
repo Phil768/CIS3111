@@ -38,17 +38,17 @@ app.get("/storeNumbers", async (req, res) => {
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
     try {
-      for (let i = 0; i < 1000; i++) {
-        //Getting the instance name.(default in case it is used locally)
-        const instanceName = process.env.GAE_INSTANCE || "default";
-        //Generatinga number between 0 and 100,000.
-        const randomNumber = Math.floor(Math.random() * 100001);
-        //Creating the query which is used to store both the numbers and the instance name into the databse.
-        const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
-        //Executing the query.
-        await connection.query(insertQuery);
-        console.log("Connected and generated number");
-      }
+      //for (let i = 0; i < 1000; i++) {
+      //Getting the instance name.(default in case it is used locally)
+      const instanceName = process.env.GAE_INSTANCE || "default";
+      //Generatinga number between 0 and 100,000.
+      const randomNumber = Math.floor(Math.random() * 100001);
+      //Creating the query which is used to store both the numbers and the instance name into the databse.
+      const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
+      //Executing the query.
+      await connection.query(insertQuery);
+      console.log("Connected and generated number");
+      //}
     } catch (e) {
       console.log("Failed because: " + e);
     }
