@@ -38,28 +38,21 @@ function Container() {
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
     try {
-      const batchSize = 2000;
-      const totalRequests = 10000;
-      const batches = Math.ceil(totalRequests / batchSize);
-
+      const promises = [];
       //Storing the URL in a constant.
       const url = //"http://localhost:5000/storeNumbers";
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
-
-      for (let i = 0; i < batches; i++) {
-        const start = i * batchSize;
-        const end = Math.min(start + batchSize, totalRequests);
-
-        const batchPromises = [];
-
-        for (let j = start; j < end; j++) {
-          batchPromises.push(fetch(url));
+      //Starting message.
+      console.log(">>!Started!<<");
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < 1000; j++) {
+          promises.push(fetch(url));
         }
-
-        await Promise.all(batchPromises);
         //Brief timeout to introduce a buffer to the SQL connections
         await new Promise((resolve) => setTimeout(resolve, 5000));
       }
+      await Promise.all(promises);
+      //Finished message.
       console.log(">>!Finished!<<");
     } catch (e) {
       console.log("Error: " + e);
