@@ -42,7 +42,7 @@ function Container() {
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
     const promises = [];
     try {
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 1000; i++) {
         promises.push(
           fetch(
             //"http://localhost:5000/storeNumbers" ||
