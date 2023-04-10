@@ -38,7 +38,7 @@ function Container() {
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
     try {
-      const batchSize = 500;
+      const batchSize = 2000;
       const totalRequests = 10000;
       const batches = Math.ceil(totalRequests / batchSize);
 
@@ -58,8 +58,9 @@ function Container() {
 
         await Promise.all(batchPromises);
         //Brief timeout to introduce a buffer to the SQL connections
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
       }
+      console.log(">>!Finished!<<");
     } catch (e) {
       console.log("Error: " + e);
     }
