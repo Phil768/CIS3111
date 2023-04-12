@@ -1,5 +1,6 @@
 //Importing the required libraries;
 const express = require("express");
+const bodyParser = require("body-parser");
 const mysql = require("promise-mysql");
 const cors = require("cors");
 const app = express();
@@ -19,7 +20,6 @@ const createTcpPool = async (config) => {
   //Returning the connection.
   return mysql.createPool(dbConfig);
 };
-console.log(port);
 // Set up CORS headers to allow requests from different servers.
 app.use(cors());
 app.use((err, req, res, next) => {
@@ -32,6 +32,8 @@ app.use((err, req, res, next) => {
 app.get("/", function (req, res) {
   res.send("Welcome to my API!");
 });
+//hadnling the body parser.
+app.use(bodyParser.json());
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.post("/storeNumbers", async (req, res) => {
   try {
@@ -40,6 +42,7 @@ app.post("/storeNumbers", async (req, res) => {
     const connection = await TCP.getConnection();
     //Getting the array of random numbers.
     const { numbers } = req.body;
+    console.log(numbers);
     try {
       //Getting the instance name.(default in case it is used locally)
       const instanceName = process.env.GAE_INSTANCE || "default";
