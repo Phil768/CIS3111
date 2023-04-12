@@ -14,7 +14,7 @@ function Container() {
     const url =
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable";
     try {
-      fetch("http://localhost:5000/resetTable", {
+      fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,13 +36,13 @@ function Container() {
     try {
       const promises = [];
       //Storing the URL in a constant.
-      const url = "http://localhost:5000/storeNumbers";
-      //"https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
+      const url = //"http://localhost:5000/storeNumbers";
+        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 1000; i++) {
         const batch = [];
-        for (let j = 0; j < 100; j++) {
+        for (let j = 0; j < 10; j++) {
           batch.push(fetch(url));
         }
         promises.push(Promise.all(batch));
@@ -61,8 +61,8 @@ function Container() {
     const url =
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers";
     fetch(
-      "http://localhost:5000/getNumbers"
-      //url
+      //"http://localhost:5000/getNumbers"
+      url
     )
       .then(async (response) => {
         setData(await response.json());
