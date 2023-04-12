@@ -49,16 +49,27 @@ function Container() {
           //Pushing the nuumber to an array.
           batch.push(randomNumber);
         }
-        await fetch(url, {
-          method: "POST",
-          body: JSON.stringify({ numbers: batch }),
-          headers: {
-            "Content-Type": "application/json",
-          },
+        const promise = new Promise((resolve, reject) => {
+          setTimeout(async () => {
+            try {
+              await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ numbers: batch }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+              console.log(`Inserted batch [${i + 1}]`);
+              resolve();
+            } catch (error) {
+              console.log(`Error in batch [${i + 1}]: ${error}`);
+              reject(error);
+            }
+          }, i * 5000); // delay each batch by 5 seconds
         });
-        console.log(`Inserted batch [${i + 1}]`);
+        promises.push(promise);
       }
-      //Finished message.
+      await Promise.all(promises);
       console.log(">>!Finished!<<");
     } catch (e) {
       console.log("Error: " + e);
