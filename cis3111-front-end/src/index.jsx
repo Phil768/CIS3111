@@ -40,9 +40,9 @@ function Container() {
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 100; i++) {
         const batch = [];
-        for (let j = 0; j < 10; j++) {
+        for (let j = 0; j < 100; j++) {
           batch.push(fetch(url));
         }
         promises.push(Promise.all(batch));
