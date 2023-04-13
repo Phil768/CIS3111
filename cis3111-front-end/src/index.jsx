@@ -11,7 +11,7 @@ function Container() {
   const [reset, setReset] = React.useState(true);
   //Creating a function which resets the table.
   const resetTable = () => {
-    const url =
+    const url = //"http://localhost:5000/resetTable";
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable";
     try {
       fetch(url, {
@@ -40,10 +40,10 @@ function Container() {
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < 100; i++) {
         //Creating a new array witch each iteration to hold teh current batch.
         const batch = [];
-        for (let j = 0; j < 1000; j++) {
+        for (let j = 0; j < 100; j++) {
           //Generating a random number between 0 and 100,000.
           const randomNumber = Math.floor(Math.random() * 100001);
           //Pushing the nuumber to an array.
@@ -77,7 +77,7 @@ function Container() {
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
-    const url =
+    const url = //"http://localhost:5000/getNumbers";
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers";
     fetch(
       //"http://localhost:5000/getNumbers"
