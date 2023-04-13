@@ -9,10 +9,12 @@ function Container() {
   const [data, setData] = React.useState({});
   const [showTable, setShowTable] = React.useState(false);
   const [reset, setReset] = React.useState(true);
+  const [progress, setProgress] = React.useState(0);
+  const [showProgress, setShowProgress] = React.useState(false);
   //Creating a function which resets the table.
   const resetTable = () => {
-    const url = //"http://localhost:5000/resetTable";
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable";
+    const url = "http://localhost:5000/resetTable";
+    //"https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable";
     try {
       fetch(url, {
         method: "POST",
@@ -26,6 +28,7 @@ function Container() {
         .catch((error) => {
           console.log(error.message);
         });
+      alert("Table containing all random numbers has been reset.");
       setReset(!reset);
     } catch (e) {
       console.log("Error: " + e);
@@ -33,11 +36,13 @@ function Container() {
   };
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
+    alert("Started generating numbers.");
+    setShowProgress(true);
     try {
       const promises = [];
       //Storing the URL in a constant.
-      const url = //"http://localhost:5000/storeNumbers";
-        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
+      const url = "http://localhost:5000/storeNumbers";
+      //"https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
       for (let i = 0; i < 100; i++) {
@@ -60,6 +65,8 @@ function Container() {
                 },
               });
               console.log(`Inserted batch [${i + 1}]`);
+              //Setting the progress of the progress bar.
+              setProgress((i + 1) / 100);
               resolve();
             } catch (error) {
               console.log(`Error in batch [${i + 1}]: ${error}`);
@@ -71,14 +78,20 @@ function Container() {
       }
       await Promise.all(promises);
       console.log(">>!Finished!<<");
+      //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
+      setTimeout(() => {
+        setShowProgress(false);
+        setProgress(0);
+        alert("Finsihed generating numbers.");
+      }, 2000);
     } catch (e) {
       console.log("Error: " + e);
     }
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
-    const url = //"http://localhost:5000/getNumbers";
-      "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers";
+    const url = "http://localhost:5000/getNumbers";
+    //f"https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers";
     fetch(
       //"http://localhost:5000/getNumbers"
       url
@@ -156,7 +169,9 @@ function Container() {
           information about each instance. The first table describes all the
           instances created and the number of generated numbers that it has. The
           second table on the other hand displays some basic statistics found in
-          the instances, such as the largest and smallest numbers.
+          the instances, such as the largest and smallest numbers. When
+          attempting to generate a new set of numbers, it is best to refresh the
+          page.
         </p>
         {reset && (
           <button className="generateButton" onClick={resetTable}>
@@ -166,6 +181,30 @@ function Container() {
         <button className="generateButton" onClick={generateNumbers}>
           Generate
         </button>
+        {showProgress && (
+          <div>
+            <h4>Generating numbers...</h4>
+            <div
+              style={{
+                width: "100%",
+                height: "30px",
+                backgroundColor: "#ccc",
+                borderRadius: "5px",
+                border: "1px solid black",
+              }}
+            >
+              <div
+                style={{
+                  width: `${progress * 100}%`,
+                  height: "100%",
+                  backgroundColor: "#4CAF50",
+                  borderRadius: "5px",
+                  transition: "width 0.3s ease-in-out",
+                }}
+              ></div>
+            </div>
+          </div>
+        )}
         {showTable && (
           <div className="allInstances">
             <h2 className="sub-header">All instances and their size.</h2>
@@ -182,7 +221,7 @@ function Container() {
           <button
             className="getButton"
             onClick={getNumbers}
-            disabled={showTable}
+            disabled={showProgress}
           >
             Get
           </button>
