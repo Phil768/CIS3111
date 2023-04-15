@@ -72,7 +72,7 @@ function Container() {
               console.log(`Error in batch [${i + 1}]: ${error}`);
               reject(error);
             }
-          }, i * 100); // delay each batch by 5 seconds
+          }, i * 500); // delay each batch by 5 seconds
         });
         promises.push(promise);
       }
