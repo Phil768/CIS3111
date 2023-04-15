@@ -57,6 +57,10 @@ function Container() {
         const promise = new Promise((resolve, reject) => {
           setTimeout(async () => {
             try {
+              // Adding a computationally intensive task here to increase resource usage
+              for (let k = 0; k < 100000; k++) {
+                Math.sin(k);
+              }
               await fetch(url, {
                 method: "POST",
                 body: JSON.stringify({ numbers: batch }),
