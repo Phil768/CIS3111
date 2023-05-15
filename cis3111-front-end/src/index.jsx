@@ -45,10 +45,10 @@ function Container() {
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 1000; i++) {
+      for (let i = 0; i < 500; i++) {
         //Creating a new array witch each iteration to hold teh current batch.
         const batch = [];
-        for (let j = 0; j < 10; j++) {
+        for (let j = 0; j < 20; j++) {
           //Generating a random number between 0 and 100,000.
           const randomNumber = Math.floor(Math.random() * 100001);
           //Pushing the number to an array.
@@ -72,7 +72,7 @@ function Container() {
               console.log(`Error in batch [${i + 1}]: ${error}`);
               reject(error);
             }
-          }, i * 500); // delay each batch by 5 seconds
+          }, i * 50); // delay each batch by 5 seconds
         });
         promises.push(promise);
       }
