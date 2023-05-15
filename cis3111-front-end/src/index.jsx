@@ -45,22 +45,18 @@ function Container() {
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 100; i++) {
+      for (let i = 0; i < 10; i++) {
         //Creating a new array witch each iteration to hold teh current batch.
         const batch = [];
-        for (let j = 0; j < 100; j++) {
+        for (let j = 0; j < 1000; j++) {
           //Generating a random number between 0 and 100,000.
           const randomNumber = Math.floor(Math.random() * 100001);
-          //Pushing the nuumber to an array.
+          //Pushing the number to an array.
           batch.push(randomNumber);
         }
         const promise = new Promise((resolve, reject) => {
           setTimeout(async () => {
             try {
-              // Adding a computationally intensive task here to increase resource usage
-              for (let k = 0; k < 100000; k++) {
-                Math.sin(k);
-              }
               await fetch(url, {
                 method: "POST",
                 body: JSON.stringify({ numbers: batch }),
