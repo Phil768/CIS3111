@@ -48,7 +48,7 @@ function Container() {
       for (let i = 0; i < 100; i++) {
         //Creating a new array witch each iteration to hold teh current batch.
         const batch = [];
-        for (let j = 0; j < 500; j++) {
+        for (let j = 0; j < 100; j++) {
           //Generating a random number between 0 and 100,000.
           const randomNumber = Math.floor(Math.random() * 100001);
           //Pushing the nuumber to an array.
