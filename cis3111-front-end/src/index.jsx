@@ -9,6 +9,7 @@ function Container() {
   const [data, setData] = React.useState({});
   const [showTable, setShowTable] = React.useState(false);
   const [reset, setReset] = React.useState(true);
+  const [currentBatch, setCurrentBatch] = React.useState("");
   const [progress, setProgress] = React.useState(0);
   const [showProgress, setShowProgress] = React.useState(false);
   //Creating a function which resets the table.
@@ -64,9 +65,9 @@ function Container() {
                   "Content-Type": "application/json",
                 },
               });
-              console.log(`Inserted batch [${i + 1}]`);
+              setCurrentBatch(`Inserted batch [${i + 1}]`);
               //Setting the progress of the progress bar.
-              setProgress((i + 1) / 100);
+              setProgress((i + 1) / 500);
               resolve();
             } catch (error) {
               console.log(`Error in batch [${i + 1}]: ${error}`);
@@ -183,7 +184,7 @@ function Container() {
         </button>
         {showProgress && (
           <div>
-            <h4>Generating numbers...</h4>
+            <h4>{currentBatch}</h4>
             <div
               style={{
                 width: "100%",
