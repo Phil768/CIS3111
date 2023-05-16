@@ -40,7 +40,7 @@ function Container() {
     alert("Started generating numbers.");
     setShowProgress(true);
     try {
-      //const promises = [];
+      const promises = [];
       //Storing the URL in a constant.
       const url = //"http://localhost:5000/storeNumbers";
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
@@ -55,27 +55,29 @@ function Container() {
           //Pushing the number to an array.
           batch.push(randomNumber);
         }
-        setTimeout(async () => {
-          try {
-            await fetch(url, {
-              method: "POST",
-              body: JSON.stringify({ numbers: batch }),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            });
-            setCurrentBatch(`Inserted batch [${i + 1}]`);
-            //Setting the progress of the progress bar.
-            setProgress((i + 1) / 1000);
-            //resolve();
-          } catch (error) {
-            console.log(`Error in batch [${i + 1}]: ${error}`);
-            //reject(error);
-          }
-        }, 500); // delay each batch by 5 seconds
-        //promises.push(promise);
+        const promise = new Promise((resolve, reject) => {
+          setTimeout(async () => {
+            try {
+              await fetch(url, {
+                method: "POST",
+                body: JSON.stringify({ numbers: batch }),
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+              setCurrentBatch(`Inserted batch [${i + 1}]`);
+              //Setting the progress of the progress bar.
+              setProgress((i + 1) / 1000);
+              resolve();
+            } catch (error) {
+              console.log(`Error in batch [${i + 1}]: ${error}`);
+              reject(error);
+            }
+          }, i * 5000); // delay each batch by 5 seconds
+        });
+        promises.push(promise);
       }
-      //await Promise.all(promises);
+      await Promise.all(promises);
       console.log(">>!Finished!<<");
       //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
       setTimeout(() => {
