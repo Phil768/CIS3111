@@ -40,16 +40,16 @@ function Container() {
     alert("Started generating numbers.");
     setShowProgress(true);
     try {
-      const promises = [];
+      //const promises = [];
       //Storing the URL in a constant.
       const url = //"http://localhost:5000/storeNumbers";
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       //Starting message.
       console.log(">>!Started!<<");
-      for (let i = 0; i < 500; i++) {
+      for (let i = 0; i < 1000; i++) {
         //Creating a new array witch each iteration to hold teh current batch.
         const batch = [];
-        for (let j = 0; j < 20; j++) {
+        for (let j = 0; j < 10; j++) {
           //Generating a random number between 0 and 100,000.
           const randomNumber = Math.floor(Math.random() * 100001);
           //Pushing the number to an array.
@@ -67,17 +67,17 @@ function Container() {
               });
               setCurrentBatch(`Inserted batch [${i + 1}]`);
               //Setting the progress of the progress bar.
-              setProgress((i + 1) / 500);
+              setProgress((i + 1) / 1000);
               resolve();
             } catch (error) {
               console.log(`Error in batch [${i + 1}]: ${error}`);
               reject(error);
             }
-          }, i * 50); // delay each batch by 5 seconds
+          }, 500); // delay each batch by 5 seconds
         });
-        promises.push(promise);
+        //promises.push(promise);
       }
-      await Promise.all(promises);
+      //await Promise.all(promises);
       console.log(">>!Finished!<<");
       //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
       setTimeout(() => {
