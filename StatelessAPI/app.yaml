@@ -8,8 +8,7 @@ automatic_scaling:
   cool_down_period_sec: 60
   cpu_utilization:
     target_utilization: 0.7
-  request_count:
-    target_request_count_per_sec: 100
+  target_concurrent_requests: 100
 
 handlers:
   - url: /.*
