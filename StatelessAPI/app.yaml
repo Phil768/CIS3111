@@ -5,10 +5,11 @@ env: flex
 automatic_scaling:
   min_num_instances: 5
   max_num_instances: 15
-  cool_down_period_sec: 180
+  cool_down_period_sec: 60
   cpu_utilization:
-    target_utilization: 0.9
-  target_concurrent_requests: 300
+    target_utilization: 0.7
+  request_count:
+    target_request_count_per_sec: 100
 
 handlers:
   - url: /.*
