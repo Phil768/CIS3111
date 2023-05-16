@@ -55,26 +55,24 @@ function Container() {
           //Pushing the number to an array.
           batch.push(randomNumber);
         }
-        const promise = new Promise((resolve, reject) => {
-          setTimeout(async () => {
-            try {
-              await fetch(url, {
-                method: "POST",
-                body: JSON.stringify({ numbers: batch }),
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
-              setCurrentBatch(`Inserted batch [${i + 1}]`);
-              //Setting the progress of the progress bar.
-              setProgress((i + 1) / 1000);
-              resolve();
-            } catch (error) {
-              console.log(`Error in batch [${i + 1}]: ${error}`);
-              reject(error);
-            }
-          }, 500); // delay each batch by 5 seconds
-        });
+        setTimeout(async () => {
+          try {
+            await fetch(url, {
+              method: "POST",
+              body: JSON.stringify({ numbers: batch }),
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+            setCurrentBatch(`Inserted batch [${i + 1}]`);
+            //Setting the progress of the progress bar.
+            setProgress((i + 1) / 1000);
+            //resolve();
+          } catch (error) {
+            console.log(`Error in batch [${i + 1}]: ${error}`);
+            //reject(error);
+          }
+        }, 500); // delay each batch by 5 seconds
         //promises.push(promise);
       }
       //await Promise.all(promises);
