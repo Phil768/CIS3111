@@ -8,8 +8,7 @@ automatic_scaling:
   cool_down_period_sec: 70
   cpu_utilization:
     target_utilization: 0.05
-  max_concurrent_requests: 200
-  target_throughput_utilization: 0.5
+  max_concurrent_requests: 166
 
 handlers:
   - url: /.*
