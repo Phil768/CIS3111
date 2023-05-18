@@ -1,6 +1,6 @@
 service: api
 runtime: nodejs
-env: standard
+env: flex
 
 automatic_scaling:
   min_num_instances: 5
