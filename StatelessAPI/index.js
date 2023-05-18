@@ -11,11 +11,11 @@ const createTcpPool = async (config) => {
   //Creating an object with all the required properties.
   const dbConfig = {
     connectionLimit: 10,
-    host: "34.22.195.254",
+    host: "34.78.16.243",
     port: "3306",
-    user: "philUser",
-    password: "WMyBrEGmUrWSRcoErImK8pHK",
-    database: "CIS3111",
+    user: "CIS3111_Assignment",
+    password: "CIS3111",
+    database: "CIS3111_Assignment",
   };
   //Returning the connection.
   return mysql.createPool(dbConfig);
@@ -30,11 +30,20 @@ app.use((err, req, res, next) => {
 });
 //Handling the root URL.
 app.get("/", function (req, res) {
-  res.send("Welcome to my API!");
+  res.send("Welcome to my random numbers API for CIS3111!");
 });
 //hadnling the body parser.
 app.use(bodyParser.json());
-//Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
+//creating the third enpoint of the API, which is respoonsible for generating the random numbers.
+app.get("/generateNumbers", async (req, res) => {
+  try {
+    //Generating a random number between 0 and 100,000.
+    const randomNumber = Math.floor(Math.random() * 100001);
+  } catch (e) {
+    console.log("Error generating random number: " + e);
+  }
+});
+//Creating the second endpoint of the API, which is responsible for storing the random numbers.
 app.post("/storeNumbers", async (req, res) => {
   try {
     //Establishing the connection.
@@ -73,7 +82,7 @@ app.post("/storeNumbers", async (req, res) => {
     });
   }
 });
-//Creating the second endpoint required to fetch the random numbers from the databse.
+//Creating the third endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
   try {
     console.log("HIT1");
@@ -146,7 +155,7 @@ app.get("/getNumbers", async (req, res) => {
     });
   }
 });
-//Creatign the final table which is used to reset the table content.
+//Creating the final table which is used to reset the table content.
 app.post("/resetTable", async (req, res) => {
   try {
     //Establishing the connection.
