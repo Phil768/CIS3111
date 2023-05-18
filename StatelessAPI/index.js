@@ -11,11 +11,11 @@ const createTcpPool = async (config) => {
   //Creating an object with all the required properties.
   const dbConfig = {
     connectionLimit: 10,
-    host: "34.78.16.243",
+    host: "34.22.195.254",
     port: "3306",
-    user: "CIS3111_Assignment",
-    password: "CIS3111",
-    database: "CIS3111_Assignment",
+    user: "philUser",
+    password: "WMyBrEGmUrWSRcoErImK8pHK",
+    database: "CIS3111",
   };
   //Returning the connection.
   return mysql.createPool(dbConfig);
