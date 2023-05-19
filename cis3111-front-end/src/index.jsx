@@ -53,6 +53,7 @@ function Container() {
           //Generating the numbers.
           try {
             batch.push(fetch(url));
+            console.log("success");
           } catch (e) {
             console.log("Number generation failed: " + e);
           }

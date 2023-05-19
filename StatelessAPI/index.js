@@ -34,13 +34,14 @@ app.get("/", function (req, res) {
 });
 //hadnling the body parser.
 app.use(bodyParser.json());
-//creating the third enpoint of the API, which is respoonsible for generating the random numbers.
+//creating the third enpoint of the API, which is responsible for generating the random numbers.
 app.get("/generateNumbers", async (req, res) => {
   try {
     //Generating a random number between 0 and 100,000.
     const randomNumber = Math.floor(Math.random() * 100001);
     //Getting the instance name.(default in case it is used locally)
     const instanceName = process.env.GAE_INSTANCE || "default";
+    console.log(instance, number);
     //Inserting the numbers into the db.
     storeNumbers(instanceName, randomNumber);
   } catch (e) {
@@ -64,18 +65,9 @@ const storeNumbers = async (instance, number) => {
     }
     //Closing the connection.
     await connection.release();
-    //Getting a successful message from serer if erverything works.
-    res.status(200).json({
-      message: "Success",
-    });
   } catch (e) {
     //Getting a failed message from serer if something goes wrong.
     console.error(e);
-    res.status(500).json({
-      message: "Error generating and storing random numbers",
-      error: e.message,
-    });
-  }
 };
 //Creating the third endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
