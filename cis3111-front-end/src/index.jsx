@@ -37,8 +37,8 @@ function Container() {
   };
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
-    const batchSize = 1000;
-    const totalRequests = 10000;
+    const batchSize = 100;
+    const totalRequests = 1000;
     const batches = Math.ceil(totalRequests / batchSize);
     alert("Started generating numbers.");
     setShowProgress(true);
