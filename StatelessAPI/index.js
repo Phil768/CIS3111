@@ -59,6 +59,10 @@ app.post("/storeNumbers", async (req, res) => {
       const randomNumber = Math.floor(Math.random() * 100001);
       //Getting the instance name.(default in case it is used locally)
       const instanceName = process.env.GAE_INSTANCE || "default";
+      //Storing the values to be inserted into a variables.
+      const values = numbers
+        .map((number) => `('${instanceName}', ${number})`)
+        .join(",");
       //Creating the query which is used to store both the numbers and the instance name into the databse.
       const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber})`;
       //Executing the query.
