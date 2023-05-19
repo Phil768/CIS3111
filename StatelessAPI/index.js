@@ -41,7 +41,7 @@ app.get("/generateNumbers", async (req, res) => {
     const randomNumber = Math.floor(Math.random() * 100001);
     //Getting the instance name.(default in case it is used locally)
     const instanceName = process.env.GAE_INSTANCE || "default";
-    console.log(instance, number);
+    console.log(instanceName, randomNumber);
     //Inserting the numbers into the db.
     storeNumbers(instanceName, randomNumber);
   } catch (e) {
