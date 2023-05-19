@@ -42,7 +42,6 @@ function Container() {
     const batches = Math.ceil(totalRequests / batchSize);
     alert("Started generating numbers.");
     setShowProgress(true);
-    const promises = [];
     //Storing the URL in a constant.
     const url = //"http://localhost:5000/storeNumbers";
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
@@ -54,25 +53,21 @@ function Container() {
       //Creating a new array witch each iteration to hold teh current batch.
       const batch = [];
       for (let j = start; j < end; j++) {
-        try {
-          batch.push(
-            await fetch(url, {
-              method: "POST",
-              body: JSON.stringify({}),
-              headers: {
-                "Content-Type": "application/json",
-              },
-            })
-          );
-          setCurrentBatch(`Inserted batch [${i + 1}]`);
-          //Setting the progress of the progress bar.
-          setProgress((i + 1) / 1000);
-        } catch (error) {
-          console.log(`Error in batch [${i + 1}]: ${error}`);
-        }
+        batch.push(
+          await fetch(url, {
+            method: "POST",
+            body: JSON.stringify({}),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+        );
       }
+      setCurrentBatch(`Inserted batch [${i + 1}]`);
+      //Setting the progress of the progress bar.
+      setProgress((i + 1) / 1000);
       await Promise.all(batch);
-      await sleep(2000);
+      await sleep(4000);
     }
     console.log(">>!Finished!<<");
     //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
