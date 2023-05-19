@@ -84,12 +84,7 @@ function Container() {
     //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
     setTimeout(() => {
       setShowProgress(false);
-      console.log("Error: " + e);
     });
-  };
-  //Sleep function used by the above.
-  const sleep = async (msec) => {
-    return new Promise((resolve) => setTimeout(resolve, msec));
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
