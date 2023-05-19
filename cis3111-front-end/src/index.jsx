@@ -47,13 +47,14 @@ function Container() {
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
     //Starting message.
     console.log(">>!Started!<<");
+    setCurrentBatch(`Inserted batch [0/${batches}]`);
     for (let i = 0; i < batches; i++) {
       const start = i * batchSize;
       const end = Math.min(start + batchSize, totalRequests);
       //Creating a new array witch each iteration to hold teh current batch.
       const batch = [];
       for (let j = start; j < end; j++) {
-        batch.push(await fetch(url));
+        batch.push(fetch(url));
       }
       setCurrentBatch(`Inserted batch [${i + 1}/${batches}]`);
       //Setting the progress of the progress bar.
