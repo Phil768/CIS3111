@@ -45,7 +45,7 @@ function Container() {
     try {
       //Storing the URL in a constant.
       const url = //"http://localhost:5000/storeNumbers";
-        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/generateNumbers";
+        "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
       for (let i = 0; i < batches; i++) {
         //Creating the start and end parameters for the loop according to the current state.
         const start = i * batchSize; //1000 is the size of each batch
@@ -55,7 +55,11 @@ function Container() {
         for (let j = start; j < finish; j++) {
           //Generating the numbers.
           try {
-            batch.push(fetch(url));
+            batch.push(
+              fetch(
+                "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers"
+              )
+            );
             console.log("success");
           } catch (e) {
             console.log("Number generation failed: " + e);
