@@ -46,7 +46,7 @@ app.post("/storeNumbers", async (req, res) => {
     try {
       //Getting the instance name.(default in case it is used locally)
       const instanceName = process.env.GAE_INSTANCE || "default";
-      //Storing the values to be inserted into a variable.
+      //Storing the values to be inserted into a variables.
       const values = numbers
         .map((number) => `('${instanceName}', ${number})`)
         .join(",");
