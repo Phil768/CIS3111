@@ -68,6 +68,7 @@ const storeNumbers = async (instance, number) => {
   } catch (e) {
     //Getting a failed message from serer if something goes wrong.
     console.error(e);
+  }
 };
 //Creating the third endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
