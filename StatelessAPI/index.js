@@ -49,7 +49,7 @@ app.use(bodyParser.json());
 //   }
 // });
 //Creating the second endpoint of the API, which is responsible for storing the random numbers.
-app.get("/storeNumbers", async (req, res) => {
+app.post("/storeNumbers", async (req, res) => {
   try {
     //Establishing the connection.
     const TCP = await createTcpPool();
