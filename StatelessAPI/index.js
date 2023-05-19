@@ -39,28 +39,23 @@ app.get("/generateNumbers", async (req, res) => {
   try {
     //Generating a random number between 0 and 100,000.
     const randomNumber = Math.floor(Math.random() * 100001);
+    //Getting the instance name.(default in case it is used locally)
+    const instanceName = process.env.GAE_INSTANCE || "default";
+    //Inserting the numbers into the db.
+    storeNumbers(instanceName, randomNumber);
   } catch (e) {
     console.log("Error generating random number: " + e);
   }
 });
 //Creating the second endpoint of the API, which is responsible for storing the random numbers.
-app.post("/storeNumbers", async (req, res) => {
+const storeNumbers = async (instance, number) => {
   try {
     //Establishing the connection.
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
-    //Getting the array of random numbers.
-    const { numbers } = req.body;
-    console.log(numbers);
     try {
-      //Getting the instance name.(default in case it is used locally)
-      const instanceName = process.env.GAE_INSTANCE || "default";
-      //Storing the values to be inserted into a variable.
-      const values = numbers
-        .map((number) => `('${instanceName}', ${number})`)
-        .join(",");
       //Creating the query which is used to store both the numbers and the instance name into the databse.
-      const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ${values};`;
+      const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number})`;
       //Executing the query.
       await connection.query(insertQuery);
       console.log("Connected and generated number");
@@ -81,7 +76,7 @@ app.post("/storeNumbers", async (req, res) => {
       error: e.message,
     });
   }
-});
+};
 //Creating the third endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
   try {
