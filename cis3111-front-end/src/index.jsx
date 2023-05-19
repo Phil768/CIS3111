@@ -37,8 +37,8 @@ function Container() {
   };
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
-    const batchSize = 100;
-    const totalRequests = 100;
+    const batchSize = 1000;
+    const totalRequests = 10000;
     const batches = Math.ceil(totalRequests / batchSize);
     alert("Started generating numbers.");
     setShowProgress(true);
@@ -48,38 +48,32 @@ function Container() {
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
     //Starting message.
     console.log(">>!Started!<<");
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < batches; i++) {
+      const start = i * batchSize;
+      const end = Math.min(start + batchSize, totalRequests);
       //Creating a new array witch each iteration to hold teh current batch.
       const batch = [];
-      for (let j = 0; j < 10; j++) {
-        //Generating a random number between 0 and 100,000.
-        const randomNumber = Math.floor(Math.random() * 100001);
-        //Pushing the number to an array.
-        batch.push(randomNumber);
-      }
-      const promise = new Promise((resolve, reject) => {
-        setTimeout(async () => {
-          try {
+      for (let j = start; j < end; j++) {
+        try {
+          batch.push(
             await fetch(url, {
               method: "POST",
-              body: JSON.stringify({ numbers: batch }),
+              body: JSON.stringify({}),
               headers: {
                 "Content-Type": "application/json",
               },
-            });
-            setCurrentBatch(`Inserted batch [${i + 1}]`);
-            //Setting the progress of the progress bar.
-            setProgress((i + 1) / 1000);
-            resolve();
-          } catch (error) {
-            console.log(`Error in batch [${i + 1}]: ${error}`);
-            reject(error);
-          }
-        }, i * 50); // delay each batch by 5 seconds
-      });
-      promises.push(promise);
+            })
+          );
+          setCurrentBatch(`Inserted batch [${i + 1}]`);
+          //Setting the progress of the progress bar.
+          setProgress((i + 1) / 1000);
+        } catch (error) {
+          console.log(`Error in batch [${i + 1}]: ${error}`);
+        }
+      }
+      await Promise.all(batch);
+      await sleep(2000);
     }
-    await Promise.all(promises);
     console.log(">>!Finished!<<");
     //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
     setTimeout(() => {
