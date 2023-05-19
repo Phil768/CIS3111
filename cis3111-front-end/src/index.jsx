@@ -37,47 +37,48 @@ function Container() {
   };
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
-    const batchSize = 100;
-    const totalRequests = 100;
-    const batches = Math.ceil(totalRequests / batchSize);
     alert("Started generating numbers.");
     setShowProgress(true);
     try {
+      const promises = [];
       //Storing the URL in a constant.
       const url = //"http://localhost:5000/storeNumbers";
         "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
-      for (let i = 0; i < batches; i++) {
-        //Creating the start and end parameters for the loop according to the current state.
-        const start = i * batchSize; //1000 is the size of each batch
-        const finish = Math.min(start + batchSize, totalRequests); //10,000 is the total number of requests.
+      //Starting message.
+      console.log(">>!Started!<<");
+      for (let i = 0; i < 1000; i++) {
         //Creating a new array witch each iteration to hold teh current batch.
         const batch = [];
-        for (let j = start; j < finish; j++) {
-          //Generating the numbers.
-          try {
-            batch.push(
-              fetch(url, {
+        for (let j = 0; j < 10; j++) {
+          //Generating a random number between 0 and 100,000.
+          const randomNumber = Math.floor(Math.random() * 100001);
+          //Pushing the number to an array.
+          batch.push(randomNumber);
+        }
+        const promise = new Promise((resolve, reject) => {
+          setTimeout(async () => {
+            try {
+              await fetch(url, {
                 method: "POST",
+                body: JSON.stringify({ numbers: batch }),
                 headers: {
                   "Content-Type": "application/json",
                 },
-                body: JSON.stringify({}), // Add an empty object as the request body
-              })
-            );
-            console.log("success");
-          } catch (e) {
-            console.log("Number generation failed: " + e);
-          }
-        }
-        //Awaiting all the promises to finish.
-        await Promise.all(batch);
-        //Brief timeout to increase resources strain.
-        await sleep(4000);
-        //Updating the display of the current batch.
-        setCurrentBatch(`Inserted batch [${i + 1}]`);
-        //Setting the progress of the progress bar.
-        setProgress((i + 1) / 10);
+              });
+              setCurrentBatch(`Inserted batch [${i + 1}]`);
+              //Setting the progress of the progress bar.
+              setProgress((i + 1) / 1000);
+              resolve();
+            } catch (error) {
+              console.log(`Error in batch [${i + 1}]: ${error}`);
+              reject(error);
+            }
+          }, i * 50); // delay each batch by 5 seconds
+        });
+        promises.push(promise);
       }
+      await Promise.all(promises);
+      console.log(">>!Finished!<<");
       //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
       setTimeout(() => {
         setShowProgress(false);
@@ -87,10 +88,6 @@ function Container() {
     } catch (e) {
       console.log("Error: " + e);
     }
-  };
-  //Sleep function used by the above.
-  const sleep = async (msec) => {
-    return new Promise((resolve) => setTimeout(resolve, msec));
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
