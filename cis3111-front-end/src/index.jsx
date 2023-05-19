@@ -56,9 +56,13 @@ function Container() {
           //Generating the numbers.
           try {
             batch.push(
-              fetch(
-                "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers"
-              )
+              fetch(url, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({}), // Add an empty object as the request body
+              })
             );
             console.log("success");
           } catch (e) {
