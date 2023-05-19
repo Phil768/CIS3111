@@ -62,7 +62,7 @@ function Container() {
           //Awaiting all the promises to finish.
           await Promise.all(batch);
           //Brief timeout to increase resources strain.
-          await sleep(1000);
+          await sleep(4000);
           //Updating the display of the current batch.
           setCurrentBatch(`Inserted batch [${i + 1}]`);
           //Setting the progress of the progress bar.
