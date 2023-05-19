@@ -37,8 +37,8 @@ function Container() {
   };
   //Creating a function whoch will generate and store all the random numbers.
   const generateNumbers = async () => {
-    const batchSize = 100;
-    const totalRequests = 1000;
+    const batchSize = 1000;
+    const totalRequests = 10000;
     const batches = Math.ceil(totalRequests / batchSize);
     alert("Started generating numbers.");
     setShowProgress(true);
@@ -53,21 +53,13 @@ function Container() {
       //Creating a new array witch each iteration to hold teh current batch.
       const batch = [];
       for (let j = start; j < end; j++) {
-        batch.push(
-          await fetch(url, {
-            method: "POST",
-            body: JSON.stringify({}),
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
-        );
+        batch.push(await fetch(url));
       }
-      setCurrentBatch(`Inserted batch [${i + 1}]`);
+      setCurrentBatch(`Inserted batch [${i + 1}/${batches}]`);
       //Setting the progress of the progress bar.
-      setProgress((i + 1) / 1000);
+      setProgress((i + 1) / batches);
       await Promise.all(batch);
-      await sleep(4000);
+      await sleep(2000);
     }
     console.log(">>!Finished!<<");
     //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
