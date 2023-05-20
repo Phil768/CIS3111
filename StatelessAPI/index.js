@@ -36,10 +36,11 @@ app.get("/", function (req, res) {
 app.use(bodyParser.json());
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.get("/storeNumbers", async (req, res) => {
+  let connection;
   try {
     //Establishing the connection.
     const TCP = await createTcpPool();
-    const connection = await TCP.getConnection();
+    connection = await TCP.getConnection();
     try {
       //Generating a random number between 0 and 100,000.
       const randomNumber = Math.floor(Math.random() * 100001);
@@ -53,8 +54,6 @@ app.get("/storeNumbers", async (req, res) => {
     } catch (e) {
       console.log("Failed because: " + e);
     }
-    //Closing the connection.
-    await connection.release();
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
@@ -66,6 +65,11 @@ app.get("/storeNumbers", async (req, res) => {
       message: "Error generating and storing random numbers",
       error: e.message,
     });
+  } finally {
+    if (connection) {
+      //Closing the connection.
+      await connection.release();
+    }
   }
 });
 //Creating the second endpoint required to fetch the random numbers from the databse.
