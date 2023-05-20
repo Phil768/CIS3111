@@ -36,24 +36,13 @@ app.get("/", function (req, res) {
 app.use(bodyParser.json());
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.get("/storeNumbers", async (req, res) => {
-  let connection;
   try {
-    //Establishing the connection.
-    const TCP = await createTcpPool();
-    connection = await TCP.getConnection();
-    try {
-      //Generating a random number between 0 and 100,000.
-      const randomNumber = Math.floor(Math.random() * 100001);
-      //Getting the instance name.(default in case it is used locally)
-      const instanceName = process.env.GAE_INSTANCE || "default";
-      //Creating the query which is used to store both the numbers and the instance name into the databse.
-      const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instanceName}', ${randomNumber});`;
-      //Executing the query.
-      await connection.query(insertQuery);
-      console.log("Connected and generated number");
-    } catch (e) {
-      console.log("Failed because: " + e);
-    }
+    //Generating a random number between 0 and 100,000.
+    const randomNumber = Math.floor(Math.random() * 100001);
+    //Getting the instance name.(default in case it is used locally)
+    const instanceName = process.env.GAE_INSTANCE || "default";
+    //Inserting the numners to the db.
+    saveNumbers(instanceName, randomNumber);
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
@@ -65,13 +54,23 @@ app.get("/storeNumbers", async (req, res) => {
       message: "Error generating and storing random numbers",
       error: e.message,
     });
-  } finally {
-    if (connection) {
-      //Closing the connection.
-      await connection.release();
-    }
   }
 });
+const saveNumbers = async (instance, number) => {
+  //Establishing the connection.
+  const TCP = await createTcpPool();
+  const connection = await TCP.getConnection();
+  try {
+    //Creating the query which is used to store both the numbers and the instance name into the databse.
+    const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number});`;
+    //Executing the query.
+    await connection.query(insertQuery);
+    console.log("Connected and generated number");
+    await connection.release();
+  } catch (e) {
+    console.log("Failed because: " + e);
+  }
+};
 //Creating the second endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
   try {
