@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 const createTcpPool = async (config) => {
   //Creating an object with all the required properties.
   const dbConfig = {
-    connectionLimit: 20,
+    connectionLimit: 2000,
     host: "34.78.16.243",
     port: "3306",
     user: "CIS3111_Assignment",
