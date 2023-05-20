@@ -55,15 +55,13 @@ app.get("/storeNumbers", async (req, res) => {
 });
 const saveNumbers = async (instance, number) => {
   try {
-    const connection = await pool.getConnection();
     try {
       const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number});`;
-      await connection.query(insertQuery);
+      await pool.query(insertQuery);
       console.log("Connected and generated number");
     } catch (e) {
       console.log("Failed because: " + e);
     }
-    connection.release();
   } catch (e) {
     console.error(e);
   }
@@ -72,21 +70,17 @@ const saveNumbers = async (instance, number) => {
 app.get("/getNumbers", async (req, res) => {
   try {
     //Establishing the connection.
-    const connection = await pool.getConnection();
-    console.log("HIT2");
     //Selecting all the distinct instance names from the table.
     const allInstances =
       "SELECT instance_name, COUNT(*) as count FROM random_numbers GROUP BY instance_name;";
-    console.log("HIT3");
     //Executing the query.
-    const allInstancesResult = await connection.query(allInstances);
+    const allInstancesResult = await pool.query(allInstances);
     console.log(allInstancesResult);
     //Getting the largest number and its isntance.
     const largest =
       "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
-    console.log("HIT4");
     //Saving the returned object into a variable.
-    const largestResult = await connection.query(largest);
+    const largestResult = await pool.query(largest);
     //Getting the largest number and its instance from the returned data.
     const largestInformation = largestResult.reduce((prev, current) => {
       return prev.largest_number > current.largest_number ? prev : current;
@@ -98,7 +92,7 @@ app.get("/getNumbers", async (req, res) => {
     const smallest =
       "SELECT MIN(random_number) AS smallest_number, instance_name FROM random_numbers GROUP BY instance_name;";
     //Saving the returned object into a variable.
-    const smallestResult = await connection.query(smallest);
+    const smallestResult = await pool.query(smallest);
     //Getting the smallest number and its instance from the returned data.
     const smallestInformation = smallestResult.reduce((prev, current) => {
       return prev.smallest_number < current.smallest_number ? prev : current;
@@ -107,7 +101,6 @@ app.get("/getNumbers", async (req, res) => {
     const smallestNumber = smallestInformation.smallest_number;
     const smallestInstanceName = smallestInformation.instance_name;
     //Closing the connection.
-    connection.release();
 
     console.log(
       "The largest number is " +
@@ -142,15 +135,11 @@ app.get("/getNumbers", async (req, res) => {
 //Creatign the final table which is used to reset the table content.
 app.post("/resetTable", async (req, res) => {
   try {
-    //Establishing the connection.
-    const connection = await pool.getConnection();
     //Creating the table;
     const dropTableQuery = `DROP TABLE IF EXISTS random_numbers;`;
-    await connection.query(dropTableQuery);
+    await pool.query(dropTableQuery);
     const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
-    await connection.query(createTableQuery);
-    //Closing the connection.
-    connection.release();
+    await pool.query(createTableQuery);
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
