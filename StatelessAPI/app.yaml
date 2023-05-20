@@ -12,6 +12,7 @@ automatic_scaling:
 handlers:
   - url: /.*
     script: auto
+    max_concurrent_requests: 50
 
 runtime_config:
   runtime_version: "16"
