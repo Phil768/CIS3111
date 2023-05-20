@@ -60,7 +60,7 @@ function Container() {
       //Setting the progress of the progress bar.
       setProgress((i + 1) / batches);
       await Promise.all(batch);
-      await sleep(2000);
+      await sleep(1000);
     }
     console.log(">>!Finished!<<");
     setShowProgress(false);
