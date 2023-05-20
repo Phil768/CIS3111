@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 const createTcpPool = async (config) => {
   //Creating an object with all the required properties.
   const dbConfig = {
-    connectionLimit: 10,
+    connectionLimit: 20,
     host: "34.78.16.243",
     port: "3306",
     user: "CIS3111_Assignment",
@@ -64,10 +64,10 @@ const saveNumbers = async (instance, number) => {
       const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number});`;
       await connection.query(insertQuery);
       console.log("Connected and generated number");
-      await connection.release();
     } catch (e) {
       console.log("Failed because: " + e);
     }
+    await connection.release();
   } catch (e) {
     console.error(e);
   }
