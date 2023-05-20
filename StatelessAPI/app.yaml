@@ -7,12 +7,12 @@ automatic_scaling:
   max_num_instances: 15
   cool_down_period_sec: 60
   cpu_utilization:
-    target_utilization: 0.05
+    target_utilization: 0.01
+  max_concurrent_requests: 50
 
 handlers:
   - url: /.*
     script: auto
-    max_concurrent_requests: 50
 
 runtime_config:
   runtime_version: "16"
