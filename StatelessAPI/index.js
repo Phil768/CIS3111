@@ -6,20 +6,17 @@ const cors = require("cors");
 const app = express();
 //Storing the port into a constant variable.
 const port = process.env.PORT || 5000;
-//Establishing the connection with the database.
-const createTcpPool = async (config) => {
-  //Creating an object with all the required properties.
-  const dbConfig = {
-    connectionLimit: 2000,
-    host: "34.78.16.243",
-    port: "3306",
-    user: "CIS3111_Assignment",
-    password: "CIS3111",
-    database: "CIS3111_Assignment",
-  };
-  //Returning the connection.
-  return mysql.createPool(dbConfig);
+
+//Establishing the connection with the database with a global config.
+const dbConfig = {
+  connectionLimit: 2000,
+  host: "34.78.16.243",
+  port: "3306",
+  user: "CIS3111_Assignment",
+  password: "CIS3111",
+  database: "CIS3111_Assignment",
 };
+const pool = mysql.createPool(dbConfig);
 // Set up CORS headers to allow requests from different servers.
 app.use(cors());
 app.use((err, req, res, next) => {
@@ -58,8 +55,7 @@ app.get("/storeNumbers", async (req, res) => {
 });
 const saveNumbers = async (instance, number) => {
   try {
-    const TCP = await createTcpPool();
-    const connection = await TCP.getConnection();
+    const connection = await pool.getConnection();
     try {
       const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number});`;
       await connection.query(insertQuery);
@@ -67,7 +63,7 @@ const saveNumbers = async (instance, number) => {
     } catch (e) {
       console.log("Failed because: " + e);
     }
-    await connection.release();
+    connection.release();
   } catch (e) {
     console.error(e);
   }
@@ -75,10 +71,8 @@ const saveNumbers = async (instance, number) => {
 //Creating the second endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
   try {
-    console.log("HIT1");
     //Establishing the connection.
-    const TCP = await createTcpPool();
-    const connection = await TCP.getConnection();
+    const connection = await pool.getConnection();
     console.log("HIT2");
     //Selecting all the distinct instance names from the table.
     const allInstances =
@@ -113,7 +107,7 @@ app.get("/getNumbers", async (req, res) => {
     const smallestNumber = smallestInformation.smallest_number;
     const smallestInstanceName = smallestInformation.instance_name;
     //Closing the connection.
-    await connection.release();
+    connection.release();
 
     console.log(
       "The largest number is " +
@@ -149,15 +143,14 @@ app.get("/getNumbers", async (req, res) => {
 app.post("/resetTable", async (req, res) => {
   try {
     //Establishing the connection.
-    const TCP = await createTcpPool();
-    const connection = await TCP.getConnection();
+    const connection = await pool.getConnection();
     //Creating the table;
     const dropTableQuery = `DROP TABLE IF EXISTS random_numbers;`;
     await connection.query(dropTableQuery);
     const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
     await connection.query(createTableQuery);
     //Closing the connection.
-    await connection.release();
+    connection.release();
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
