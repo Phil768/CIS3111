@@ -63,10 +63,6 @@ function Container() {
       await sleep(2000);
     }
     console.log(">>!Finished!<<");
-    //Setting a timeout to make sure that all the numbers have been generated before romeving all UI from screen.
-    setTimeout(() => {
-      setShowProgress(false);
-    });
   };
   //Sleep function used by the above.
   const sleep = async (msec) => {
