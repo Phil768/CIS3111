@@ -57,20 +57,19 @@ app.get("/storeNumbers", async (req, res) => {
   }
 });
 const saveNumbers = async (instance, number) => {
-  let connection;
   try {
-    //Establishing the connection.
     const TCP = await createTcpPool();
-    connection = await TCP.getConnection();
-    //Creating the query which is used to store both the numbers and the instance name into the databse.
-    const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number});`;
-    //Executing the query.
-    await connection.query(insertQuery);
-    console.log("Connected and generated number");
+    const connection = await TCP.getConnection();
+    try {
+      const insertQuery = `INSERT INTO random_numbers (instance_name, random_number) VALUES ('${instance}', ${number});`;
+      await connection.query(insertQuery);
+      console.log("Connected and generated number");
+      await connection.release();
+    } catch (e) {
+      console.log("Failed because: " + e);
+    }
   } catch (e) {
-    console.log("Failed because: " + e);
-  } finally {
-    await connection.release();
+    console.error(e);
   }
 };
 //Creating the second endpoint required to fetch the random numbers from the databse.
