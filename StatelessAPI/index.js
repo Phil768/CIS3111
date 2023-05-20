@@ -67,7 +67,7 @@ const saveNumbers = async (instance, number) => {
     } catch (e) {
       console.log("Failed because: " + e);
     }
-    await connection.release();
+    connection.destroy();
   } catch (e) {
     console.error(e);
   }
@@ -113,7 +113,7 @@ app.get("/getNumbers", async (req, res) => {
     const smallestNumber = smallestInformation.smallest_number;
     const smallestInstanceName = smallestInformation.instance_name;
     //Closing the connection.
-    await connection.release();
+    connection.destroy();
 
     console.log(
       "The largest number is " +
@@ -157,7 +157,7 @@ app.post("/resetTable", async (req, res) => {
     const createTableQuery = `CREATE TABLE random_numbers (instance_name VARCHAR(255), random_number INTEGER);`;
     await connection.query(createTableQuery);
     //Closing the connection.
-    await connection.release();
+    connection.destroy();
     //Getting a successful message from serer if erverything works.
     res.status(200).json({
       message: "Success",
