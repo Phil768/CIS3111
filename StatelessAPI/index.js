@@ -38,7 +38,7 @@ app.use(bodyParser.json());
 app.get("/storeNumbers", async (req, res) => {
   try {
     let randomNumber;
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10000; i++) {
       randomNumber = Math.floor(Math.random() * 100001);
     }
     //Getting the instance name.(default in case it is used locally)
