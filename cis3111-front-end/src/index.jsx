@@ -48,19 +48,19 @@ function Container() {
     //Starting message.
     console.log(">>!Started!<<");
     setCurrentBatch(`Inserted batch [0/${batches}]`);
-    for (let i = 0; i < batches; i++) {
-      const start = i * batchSize;
-      const end = Math.min(start + batchSize, totalRequests);
-      //Creating a new array witch each iteration to hold teh current batch.
-      const batch = [];
-      for (let j = start; j < end; j++) {
-        batch.push(fetch(url));
-      }
-      setCurrentBatch(`Inserted batch [${i + 1}/${batches}]`);
+    for (let i = 0; i < 10000; i++) {
+      // const start = i * batchSize;
+      // const end = Math.min(start + batchSize, totalRequests);
+      // //Creating a new array witch each iteration to hold teh current batch.
+      // const batch = [];
+      // for (let j = start; j < end; j++) {
+      fetch(url);
+      //}
+      setCurrentBatch(`Inserted batch [${i + 1}/${10000}]`);
       //Setting the progress of the progress bar.
       setProgress((i + 1) / batches);
-      await Promise.all(batch);
-      await sleep(4000);
+      // await Promise.all(batch);
+      // await sleep(2000);
     }
     console.log(">>!Finished!<<");
     setShowProgress(false);

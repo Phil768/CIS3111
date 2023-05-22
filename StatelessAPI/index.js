@@ -37,10 +37,7 @@ app.use(bodyParser.json());
 //Creating the first endpoint of the API, which is responsible for generating and storing the random numbers.
 app.get("/storeNumbers", async (req, res) => {
   try {
-    let randomNumber;
-    for (let i = 0; i < 10000; i++) {
-      randomNumber = Math.floor(Math.random() * 100001);
-    }
+    const randomNumber = Math.floor(Math.random() * 100001);
     //Getting the instance name.(default in case it is used locally)
     const instanceName = process.env.GAE_INSTANCE || "default";
     //Inserting the numners to the db.
