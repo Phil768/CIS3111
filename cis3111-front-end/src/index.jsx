@@ -14,7 +14,7 @@ function Container() {
   const [showProgress, setShowProgress] = React.useState(false);
   //Creating a function which resets the table.
   const resetTable = () => {
-    const url = //"http://localhost:5000/resetTable";
+    const url =
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/resetTable";
     try {
       fetch(url, {
@@ -43,24 +43,24 @@ function Container() {
     alert("Started generating numbers.");
     setShowProgress(true);
     //Storing the URL in a constant.
-    const url = //"http://localhost:5000/storeNumbers";
+    const url =
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/storeNumbers";
     //Starting message.
     console.log(">>!Started!<<");
     setCurrentBatch(`Inserted batch [0/${batches}]`);
     for (let i = 0; i < batches; i++) {
       const start = i * batchSize;
-      const end = Math.min(start + batchSize, totalRequests);
+      const finish = Math.min(start + batchSize, totalRequests);
       //Creating a new array witch each iteration to hold teh current batch.
       const batch = [];
-      for (let j = start; j < end; j++) {
+      for (let j = start; j < finish; j++) {
         batch.push(fetch(url));
       }
       setCurrentBatch(`Inserted batch [${i + 1}/${batches}]`);
       //Setting the progress of the progress bar.
       setProgress((i + 1) / batches);
       await Promise.all(batch);
-      await sleep(2000);
+      await sleep(1000);
     }
     console.log(">>!Finished!<<");
     setShowProgress(false);
@@ -71,12 +71,9 @@ function Container() {
   };
   //Creating a function whoch will get the minimum and maximum.
   const getNumbers = () => {
-    const url = //"http://localhost:5000/getNumbers";
+    const url =
       "https://api-dot-cis3111-2023-assignment-1.ew.r.appspot.com/getNumbers";
-    fetch(
-      //"http://localhost:5000/getNumbers"
-      url
-    )
+    fetch(url)
       .then(async (response) => {
         setData(await response.json());
       })
@@ -89,7 +86,6 @@ function Container() {
   React.useEffect(() => {
     console.log("DATA: " + JSON.stringify(data));
     if (data.hasOwnProperty("instances")) {
-      console.log("HIT");
       data.instances?.map((item) =>
         console.log(item.instance_name, item.count)
       );

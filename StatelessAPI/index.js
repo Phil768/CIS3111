@@ -30,7 +30,7 @@ app.use((err, req, res, next) => {
 });
 //Handling the root URL.
 app.get("/", function (req, res) {
-  res.send("Welcome to my API!");
+  res.send("Welcome to my API for CIS3111!");
 });
 //hadnling the body parser.
 app.use(bodyParser.json());
@@ -74,22 +74,18 @@ const saveNumbers = async (instance, number) => {
 //Creating the second endpoint required to fetch the random numbers from the databse.
 app.get("/getNumbers", async (req, res) => {
   try {
-    console.log("HIT1");
     //Establishing the connection.
     const TCP = await createTcpPool();
     const connection = await TCP.getConnection();
-    console.log("HIT2");
     //Selecting all the distinct instance names from the table.
     const allInstances =
       "SELECT instance_name, COUNT(*) as count FROM random_numbers GROUP BY instance_name;";
-    console.log("HIT3");
     //Executing the query.
     const allInstancesResult = await connection.query(allInstances);
     console.log(allInstancesResult);
     //Getting the largest number and its isntance.
     const largest =
       "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
-    console.log("HIT4");
     //Saving the returned object into a variable.
     const largestResult = await connection.query(largest);
     //Getting the largest number and its instance from the returned data.
