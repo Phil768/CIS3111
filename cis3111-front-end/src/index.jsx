@@ -127,6 +127,25 @@ function Container() {
             <td>${data.smallest.instance}</td>
           </tr>
       </tbody>`;
+      //Creatng the table which will hold all the numbers and instances.
+      const allNumbersTable = document.getElementById("allTable");
+      const allRows = data.allNumbers
+        ?.map(
+          (item) =>
+            `<tr><td>${item.instance_name}</td><td>${item.random_number}</td></tr>`
+        )
+        .join("");
+      allNumbersTable.innerHTML = `
+      <thead>
+        <tr>
+          <th>Instance name</th>
+          <th>Number</th>
+        </tr>
+      </thead>
+      <tbody>
+      ${allRows}
+      </tbody>
+      `;
     } else {
       console.log("empty");
     }
@@ -192,6 +211,12 @@ function Container() {
           <div className="instancesStats">
             <h2 className="sub-header">Instances statistics.</h2>
             <table id="statsTable" className="table"></table>
+          </div>
+        )}
+        {showTable && (
+          <div className="instancesStats">
+            <h2 className="sub-header">All numbers.</h2>
+            <table id="allTable" className="table"></table>
           </div>
         )}
         {!showTable && (

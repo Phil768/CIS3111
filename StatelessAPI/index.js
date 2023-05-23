@@ -82,7 +82,10 @@ app.get("/getNumbers", async (req, res) => {
       "SELECT instance_name, COUNT(*) as count FROM random_numbers GROUP BY instance_name;";
     //Executing the query.
     const allInstancesResult = await connection.query(allInstances);
-    console.log(allInstancesResult);
+    //Getting all the nmumbers and instances from the databse.
+    const allNumbersQuery = `SELECT * FROM random_numbers;`;
+    //Executing the query.
+    const allNumbersResult = await connection.query(allNumbersQuery);
     //Getting the largest number and its isntance.
     const largest =
       "SELECT MAX(random_number) AS largest_number, instance_name FROM random_numbers GROUP BY instance_name;";
@@ -125,6 +128,7 @@ app.get("/getNumbers", async (req, res) => {
     //Storing the obtained data into a variable.
     const returnedData = {
       instances: allInstancesResult,
+      allNumbers: allNumbersResult,
       largest: { number: largestNumber, instance: largestInstanceName },
       smallest: { number: smallestNumber, instance: smallestInstanceName },
     };
@@ -140,7 +144,7 @@ app.get("/getNumbers", async (req, res) => {
     });
   }
 });
-//Creatign the final table which is used to reset the table content.
+//Creating the final endpoint which is used to reset the table content.
 app.post("/resetTable", async (req, res) => {
   try {
     //Establishing the connection.
